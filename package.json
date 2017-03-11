@@ -1,0 +1,14 @@
+{
+  "name": "wew",
+  "version": "0.1.0",
+  "description": "🎉",
+  "main": "src/wew.js",
+  "repository": "https://github.com/nanalan/wew.git",
+  "author": "alex <16batesa@gmail.com>",
+  "license": "MPL-2.0",
+  "bin": "./bin/wew",
+  "dependencies": {
+    "nearley": "^2.8.0",
+    "tokenizer2": "^2.0.0"
+  }
+}
