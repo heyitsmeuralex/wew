@@ -65,6 +65,7 @@ var grammar = {
     {"name": "MD", "symbols": ["I"], "postprocess": d => d[0]},
     {"name": "AS", "symbols": ["AS", "_", t_plus, "_", "MD"], "postprocess": d => ['add', d[0], d[4], d[2]]},
     {"name": "AS", "symbols": ["AS", "_", t_minus, "_", "MD"], "postprocess": d => ['min', d[0], d[4], d[2]]},
+    {"name": "AS", "symbols": ["AS", "_", t_dotdot, "_", "MD"], "postprocess": d => ['cat', d[0], d[4], d[2]]},
     {"name": "AS", "symbols": ["MD"], "postprocess": d => d[0]},
     {"name": "Number", "symbols": ["Int"], "postprocess": d => ['number', d[0][0], d[0][1]]},
     {"name": "Number", "symbols": ["Float"], "postprocess": d => ['number', d[0][0], d[0][1]]},

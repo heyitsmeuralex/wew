@@ -18,6 +18,7 @@ const rules = {
 
   comma: /^,$/,
   dot: /^\.$/,
+  dotdot: /^\.\.$/,
   caret: /^\^$/,
   backslash: /^\\$/,
 

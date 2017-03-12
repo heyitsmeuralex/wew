@@ -70,9 +70,10 @@ MD -> MD _ %t_asterisk _ I {% d => ['mul', d[0], d[4], d[2]] %}
     | I                    {% d => d[0] %}
 
 # Addition & Subtraction
-AS -> AS _ %t_plus  _ MD {% d => ['add', d[0], d[4], d[2]] %}
-    | AS _ %t_minus _ MD {% d => ['min', d[0], d[4], d[2]] %}
-    | MD                 {% d => d[0] %}
+AS -> AS _ %t_plus   _ MD {% d => ['add', d[0], d[4], d[2]] %}
+    | AS _ %t_minus  _ MD {% d => ['min', d[0], d[4], d[2]] %}
+    | AS _ %t_dotdot _ MD {% d => ['cat', d[0], d[4], d[2]] %}
+    | MD                  {% d => d[0] %}
 
 # Number literals
 Number -> Int                    {% d => ['number', d[0][0], d[0][1]] %}
