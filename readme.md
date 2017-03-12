@@ -1,7 +1,8 @@
 ## wew
 #### wew is a non-complicated functional programming language. 🎉
 
-[![npm](https://img.shields.io/npm/v/wew.svg?label=release)](https://npmjs.com/package/wew)
+[![Release](https://img.shields.io/github/release/nanalan/wew.svg)](https://github.com/nanalan/wew/releases/latest)
+[![npm](https://img.shields.io/npm/v/wew.svg)](https://npmjs.com/package/wew)
 [![David](https://img.shields.io/david/nanalan/wew.svg)](https://david-dm.org/nanalan/wew)
 
 ## Installation
