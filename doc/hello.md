@@ -18,3 +18,16 @@ stick with this one for now. [More on import statements](syntax.md#imports)
 function from the **system** library we just `import`ed in.
 * The rest is a simple function call, using a string as an argument.
 [Learn more about functions](syntax.md#functions)
+
+## Running wew scripts
+
+The cli is used as follows:
+
+```
+$ wew script.w
+```
+
+That's it!
+
+> The standard file extension for wew scripts is `.w`, so we recommend you use
+> it.

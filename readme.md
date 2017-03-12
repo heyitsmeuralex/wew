@@ -14,7 +14,7 @@ $ npm install --global wew
 $ yarn global add wew
 ```
 
-If successful, the `wew` command should now invoke wew.
+If successful, the `wew` command should show the cli documentation.
 
 ## Documentation
 
