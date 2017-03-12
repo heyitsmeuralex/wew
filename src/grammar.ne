@@ -44,7 +44,13 @@ ImportStatement ->
     {% d => [ 'import', d[2] ] %}
 
 # PEMDAS / BIDMAS:
-Expression -> AS {% d => d[0] %}
+Expression -> L           {% d => d[0] %}
+            | %k_not __ L {% d => ['not', d[2]] %}
+
+# Logical operators (and, or)
+L -> Expression __ %k_and __ Expression {% d => ['and', d[0], d[4]] %}
+   | Expression __ %k_or __ Expression  {% d => ['or', d[0], d[4]] %}
+   | AS                                 {% d => d[0] %}
 
 # Parentheses / Brackets
 B  -> %t_open_paren _ AS _ %t_close_paren {% d => d[2] %}

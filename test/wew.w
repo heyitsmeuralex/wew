@@ -1,3 +1,1 @@
-if true
-  then "fact"
-  else "alternative fact"
+not true and false
