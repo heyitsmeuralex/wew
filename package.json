@@ -1,6 +1,6 @@
 {
   "name": "wew",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "wew is a non-complicated functional programming language. 🎉",
   "main": "src/wew.js",
   "repository": "https://github.com/nanalan/wew.git",
