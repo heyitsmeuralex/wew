@@ -1,21 +1,50 @@
 #!/usr/bin/env node
 
 const fs = require('fs')
-const { inspect } = require('util')
+const argv = require('yargs')
+  .alias('v', 'version')
+  .boolean([ 'ast', 'tokens' ])
+  .argv
 
-const { lex, parse, interp, error } = require('..')
-
-function trace(x) {
+function inspect(obj) {
   console.log(
-    inspect(x, { depth: null, colors: true }))
+    require('util').inspect(obj, {
+      depth: null,
+      colors: true,
+    }))
 
-  return Promise.resolve(x)
+  return obj
 }
 
-lex(fs.createReadStream('test/wew.w'))
-  .then(trace)
-  .then(parse)
-  .then(res => res[0])
-  .then(trace)
-  .then(interp)
-  .catch(error.format)
+if (argv.version) {
+  // Print wew version and exit
+  const ver = require('../package.json').version
+  console.log(`wew ${ver} 🎉`)
+} else if (argv._.length) {
+  // Interpret
+  const { lex, parse, interp, error } = require('..')
+  let fstream = fs.createReadStream(argv._[0], 'utf8')
+  
+  fstream.on('error', e => {
+    console.error(`Mistake: ${e.message}`)
+    process.exit(1)
+  })
+
+  lex(fstream)
+    .then(tokens => argv.tokens ? inspect(tokens) : tokens)
+    .then(parse)
+    .then(trees => trees[0])
+    .then(ast => argv.ast ? inspect(ast) : ast)
+    .then(interp)
+    .catch(error.format)
+} else {
+  // Help
+  console.log(`Usage: wew [options] script.w
+
+Options:
+  -v, --version      print wew version and exit
+  --ast              display AST generated from script
+  --tokens           display tokenized form of script
+
+Documentation can be found at https://git.io/vyKKp`)
+}

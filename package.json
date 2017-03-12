@@ -15,7 +15,8 @@
   "preferGlobal": true,
   "dependencies": {
     "nearley": "2.8.0",
-    "tokenizer2": "^2.0.0"
+    "tokenizer2": "^2.0.0",
+    "yargs": "^7.0.2"
   },
   "engines": {
     "node": ">=6.0.0"
