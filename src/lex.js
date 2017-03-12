@@ -5,7 +5,7 @@ const rules = {
   comment: /^#[^\n]*$/,
   whitespace: /^[\s]+$/,
 
-  keyword: /^(import|from)$/,
+  keyword: /^(import|from|if|then|else|true|false)$/,
 
   open_paren: /^\($/,
   close_paren: /^\)$/,
@@ -34,6 +34,8 @@ const ignoredRules = [
 
 const keywords = [
   'import', 'from',
+  'if', 'then', 'else',
+  'true', 'false',
 ]
 
 module.exports = inputStream => new Promise((resolve, reject) => {

@@ -51,6 +51,8 @@ B  -> %t_open_paren _ AS _ %t_close_paren {% d => d[2] %}
     | FunctionCall                        {% d => d[0] %}
     | Number                              {% d => d[0] %}
     | String                              {% d => d[0] %}
+    | Bool                                {% d => d[0] %}
+    | IfConditional                       {% d => d[0] %}
 
 # Exponents / Indicies
 I  -> B _ %t_caret _ I {% d => ['pow', d[0], d[4], d[2]] %}
@@ -79,10 +81,19 @@ Int    -> %t_int                 {% d => [ Number(d[0].src), d[0] ] %}
 String -> (%t_dq_string | %t_sq_string)
   {% d => ['string', d[0][0].src.substr(1, d[0][0].src.length-2), d[0][0]] %}
 
+# Boolean literals
+Bool -> %k_true  {% d => ['bool', true] %}
+      | %k_false {% d => ['bool', false] %}
+
 # Function invocation
 FunctionCall -> Identifier _ %t_open_paren _ ArgumentList _ %t_close_paren
   {% d => ['function_call', d[0], d[4]] %}
 ArgumentList -> List[Expression, _ %t_comma _] {% d => d[0] %}
+
+# Conditionals
+IfConditional ->
+  %k_if __ Expression __ %k_then __ Expression __ %k_else __ Expression
+  {% d => ['if_conditional', d[2], d[6], d[10]] %}
 
 # Identifier (incl. properties)
 Identifier -> List[%t_identifier, %t_dot] {% d => ['identifier', d[0]] %}
