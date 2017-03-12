@@ -10,12 +10,20 @@ const rules = {
   open_paren: /^\($/,
   close_paren: /^\)$/,
 
-  comma: /^,$/,
   asterisk: /^\*$/,
+  plus: /^\+$/,
+  minus: /^\-$/,
+  slash: /^\/$/,
+
+  comma: /^,$/,
   dot: /^\.$/,
+  caret: /^\^$/,
+  backslash: /^\\$/,
 
   dq_string: /^"([^\\"]|\\.)*"$/,
   sq_string: /^'([^\\']|\\.)*'$/,
+
+  int: /^[0-9]+$/,
 
   identifier: /^[a-zA-Z_][a-zA-Z0-9_]*$/,
 }

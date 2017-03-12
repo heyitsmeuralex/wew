@@ -1,6 +1,4 @@
-import system
+import console from system
 
-system.out.trace
-
-# system.trace("nice meme!")
-# system.print('nicer meme!')
+console.trace(14 / 0)
+console.log('hello wew')
