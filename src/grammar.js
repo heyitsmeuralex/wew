@@ -79,7 +79,7 @@ var grammar = {
     {"name": "String", "symbols": ["String$subexpression$1"], "postprocess": d => ['string', d[0][0].src.substr(1, d[0][0].src.length-2), d[0][0]]},
     {"name": "Bool", "symbols": [k_true], "postprocess": d => ['bool', true]},
     {"name": "Bool", "symbols": [k_false], "postprocess": d => ['bool', false]},
-    {"name": "FunctionCall", "symbols": ["Identifier", "_", t_open_paren, "_", "ArgumentList", "_", t_close_paren], "postprocess": d => ['function_call', d[0], d[4]]},
+    {"name": "FunctionCall", "symbols": ["Identifier", "_", t_open_paren, "_", "ArgumentList", "_", t_close_paren], "postprocess": d => ['function_call', d[0], d[4], d[2]]},
     {"name": "ArgumentList$macrocall$2", "symbols": ["Expression"]},
     {"name": "ArgumentList$macrocall$3", "symbols": ["_", t_comma, "_"]},
     {"name": "ArgumentList$macrocall$1$ebnf$1", "symbols": []},

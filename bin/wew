@@ -3,7 +3,7 @@
 const fs = require('fs')
 const { inspect } = require('util')
 
-const { lex, parse, error } = require('..')
+const { lex, parse, interp, error } = require('..')
 
 function trace(x) {
   console.log(
@@ -13,7 +13,8 @@ function trace(x) {
 }
 
 lex(fs.createReadStream('test/wew.w'))
-  .then(trace)
   .then(parse)
+  .then(res => res[0])
   .then(trace)
+  .then(interp)
   .catch(error.format)

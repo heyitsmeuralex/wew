@@ -93,7 +93,7 @@ Bool -> %k_true  {% d => ['bool', true] %}
 
 # Function invocation
 FunctionCall -> Identifier _ %t_open_paren _ ArgumentList _ %t_close_paren
-  {% d => ['function_call', d[0], d[4]] %}
+  {% d => ['function_call', d[0], d[4], d[2]] %}
 ArgumentList -> List[Expression, _ %t_comma _] {% d => d[0] %}
 
 # Conditionals
