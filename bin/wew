@@ -13,6 +13,7 @@ function trace(x) {
 }
 
 lex(fs.createReadStream('test/wew.w'))
+  .then(trace)
   .then(parse)
   .then(res => res[0])
   .then(trace)

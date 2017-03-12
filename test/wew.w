@@ -1,5 +1,9 @@
-import * from system.console
+import trace from system.console
 
-if false
-  then trace('fact')
-  else log('alternative fact')
+#{
+trace('hello')
+trace("world")
+#}
+
+trace(`Roses are red
+violets are blue`)

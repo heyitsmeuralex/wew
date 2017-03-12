@@ -84,7 +84,7 @@ Float  -> %t_int %t_dot %t_int
 Int    -> %t_int                 {% d => [ Number(d[0].src), d[0] ] %}
 
 # String literals
-String -> (%t_dq_string | %t_sq_string)
+String -> (%t_dq_string | %t_sq_string | %t_bq_string)
   {% d => ['string', d[0][0].src.substr(1, d[0][0].src.length-2), d[0][0]] %}
 
 # Boolean literals

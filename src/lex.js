@@ -2,7 +2,8 @@ const tokenizer2 = require('tokenizer2')
 const error = require('./error')
 
 const rules = {
-  comment: /^#[^\n]*$/,
+  multiline_comment: /^#{[^}]*}$/,
+  comment: /^#[^{][^\n]*$/,
   whitespace: /^[\s]+$/,
 
   keyword: /^(import|from|if|then|else|true|false|and|or|not)$/,
@@ -20,8 +21,9 @@ const rules = {
   caret: /^\^$/,
   backslash: /^\\$/,
 
-  dq_string: /^"([^\\"]|\\.)*"$/,
-  sq_string: /^'([^\\']|\\.)*'$/,
+  dq_string: /^"([^\\"\n]|\\.)*"$/,
+  sq_string: /^'([^\\'\n]|\\.)*'$/,
+  bq_string: /^`([^\\`]|\\.)*`$/m,
 
   int: /^[0-9]+$/,
 
@@ -29,7 +31,7 @@ const rules = {
 }
 
 const ignoredRules = [
-  'comment',
+  'comment', 'multiline_comment',
 ]
 
 const keywords = [

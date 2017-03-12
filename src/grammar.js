@@ -76,6 +76,7 @@ var grammar = {
     {"name": "Int", "symbols": [t_int], "postprocess": d => [ Number(d[0].src), d[0] ]},
     {"name": "String$subexpression$1", "symbols": [t_dq_string]},
     {"name": "String$subexpression$1", "symbols": [t_sq_string]},
+    {"name": "String$subexpression$1", "symbols": [t_bq_string]},
     {"name": "String", "symbols": ["String$subexpression$1"], "postprocess": d => ['string', d[0][0].src.substr(1, d[0][0].src.length-2), d[0][0]]},
     {"name": "Bool", "symbols": [k_true], "postprocess": d => ['bool', true]},
     {"name": "Bool", "symbols": [k_false], "postprocess": d => ['bool', false]},
