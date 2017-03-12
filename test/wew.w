@@ -1,5 +1,5 @@
-import system.console
+import * from system.console
 
-if true
-  then console.trace('fact')
-  else console.log('alternative fact')
+if false
+  then trace('fact')
+  else log('alternative fact')

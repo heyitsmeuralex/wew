@@ -22,7 +22,6 @@ module.exports = ast => new Promise((resolve, reject) => {
 
         // XXX: assume (1)
         const libraryName = library[0].src
-        const importName = library[library.length - 1].src
         const keys = library.slice(1).map(l => l.src)
         const lib = require(path.join(std, libraryName))
         
@@ -32,7 +31,26 @@ module.exports = ast => new Promise((resolve, reject) => {
             : obj
         }
 
-        globalScope.define(importName, traverse(lib, keys))
+        if (what) {
+          if (what === '*') {
+            // Import everything w/o namespace
+            let everything = traverse(lib, keys)
+
+            for (let name in everything) {
+              globalScope.define(name, everything[name])
+            }
+          } else {
+            // Import `what` only
+            for (let item of what.map(w => w.src)) {
+              globalScope.define(item, traverse(lib, [...keys, item]))
+            }
+          }
+        } else {
+          // Import everything incl. namespace
+          const importName = library[library.length - 1].src
+          globalScope.define(importName, traverse(lib, keys))
+        }
+
       break
 
       case 'expression':
