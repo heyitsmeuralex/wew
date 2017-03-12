@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+const { inspect } = require('util')
+
+const { lex, parse, error } = require('..')
+
+function trace(x) {
+  console.log(
+    inspect(x, { depth: null, colors: true }))
+
+  return Promise.resolve(x)
+}
+
+lex(fs.createReadStream('test/wew.w'))
+  .then(trace)
+  .then(parse)
+  .then(trace)
+  .catch(error.format)
