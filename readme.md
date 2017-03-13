@@ -1,5 +1,5 @@
 ## wew
-#### wew is a non-complicated functional programming language. 🎉
+#### a [humanist](http://www.dictionary.com/browse/humanist) [functional](https://www.wikiwand.com/en/Functional_programming) programming language 🎉
 
 [![Release](https://img.shields.io/github/release/nanalan/wew.svg)](https://github.com/nanalan/wew/releases/latest)
 [![npm](https://img.shields.io/npm/v/wew.svg)](https://npmjs.com/package/wew)
