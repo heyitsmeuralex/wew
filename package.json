@@ -1,6 +1,6 @@
 {
   "name": "wew",
-  "version": "0.1.1",
+  "version": "0.1.1-a",
   "description": "humanist functional programming language 🎉",
   "main": "src/wew.js",
   "repository": "https://github.com/nanalan/wew.git",
