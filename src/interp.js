@@ -8,11 +8,11 @@ module.exports = ast => new Promise((resolve, reject) => {
   const globalScope = new Scope()
 
   for (const chunk of program) {
-    const [type, ...rest] = chunk
+    const [ type, ...rest ] = chunk
 
     switch (type) {
       case 'import':
-        const [[, library], what] = rest
+        const [ [, library ], what ] = rest
 
         // Where actually *is* this library?
         // (1) look in std/*.js
@@ -84,20 +84,21 @@ function expression(scope, kind, ...rest) {
   switch (kind) {
     // TODO other structures/operators
 
-    case 'if_conditional':
-      const [condition, ifTrue, ifFalse] = rest
+    case 'if_conditional': {
+      const [ condition, ifTrue, ifFalse, { line, col } ] = rest
       const condRes = expression(scope, ...condition)
 
-      guard(condRes, 'Boolean', 'if condition')
+      guard(condRes, 'Boolean', 'if..then..else', 'the condition',
+        { line, col })
 
       if (condRes.value === true)
         return expression(scope, ...ifTrue)
       else
         return expression(scope, ...ifFalse)
-    break
+    break }
 
-    case 'function_call':
-      const [ident, args, { line, col }] = rest
+    case 'function_call': {
+      const [ ident, args, { line, col } ] = rest
 
       // Grab the fn from our current scope
       let fn = scope.traverse(ident)
@@ -105,17 +106,97 @@ function expression(scope, kind, ...rest) {
       // Call the fn
       // TODO user-defined functions
       fn({ line, col, scope }, ...args.map(arg => expression(scope, ...arg)))
-    break
+    break }
 
-    case 'string':
+    case 'string': {
       return new types.String(rest[0])
-    break
+    break }
 
-    case 'bool':
+    case 'bool': {
       return new types.Boolean(rest[0])
-    break
+    break }
 
-    default:
+    case 'number': {
+      return new types.Number(rest[0])
+    break }
+
+    // Boolean Operators
+
+
+    // Number Operators
+
+    case 'add': {
+      let [ a, b, { line, col } ] = rest
+      a = expression(scope, ...a)
+      b = expression(scope, ...b)
+
+      guard(a, 'Number', '+ operator', 'the left side', { line, col })
+      guard(b, 'Number', '+ operator', 'the right side', { line, col })
+
+      return new types.Number(a.plus(b))
+    break }
+
+    case 'min': {
+      let [ a, b, { line, col } ] = rest
+      a = expression(scope, ...a)
+      b = expression(scope, ...b)
+
+      guard(a, 'Number', '- operator', 'the left side', { line, col })
+      guard(b, 'Number', '- operator', 'the right side', { line, col })
+
+      return new types.Number(a.minus(b))
+    break }
+
+    case 'div': {
+      let [ a, b, { line, col } ] = rest
+      a = expression(scope, ...a)
+      b = expression(scope, ...b)
+
+      guard(a, 'Number', '/ operator', 'the left side', { line, col })
+      guard(b, 'Number', '/ operator', 'the right side', { line, col })
+
+      // TODO: check for divison by/of zero
+      return new types.Number(a.div(b))
+    break }
+
+    case 'mul': {
+      let [ a, b, { line, col } ] = rest
+      a = expression(scope, ...a)
+      b = expression(scope, ...b)
+
+      guard(a, 'Number', '* operator', 'the left side', { line, col })
+      guard(b, 'Number', '* operator', 'the right side', { line, col })
+
+      return new types.Number(a.times(b))
+    break }
+
+    case 'pow': {
+      let [ a, b, { line, col } ] = rest
+      a = expression(scope, ...a)
+      b = expression(scope, ...b)
+
+      guard(a, 'Number', '^ operator', 'the left side', { line, col })
+      guard(b, 'Integer', '^ operator', 'the right side', { line, col })
+
+      return new types.Number(a.pow(
+        Number(b.toString())))
+    break }
+
+    // String Operators
+
+    case 'cat': {
+      let [ a, b, { line, col } ] = rest
+      a = expression(scope, ...a)
+      b = expression(scope, ...b)
+
+      guard(a, 'String', '.. operator', 'the left side', { line, col })
+      guard(b, 'String', '.. operator', 'the right side', { line, col })
+
+      return new types.String(a.value + b.value)
+    break }
+
+    default: {
       throw `unknown expression kind: ${kind}`
+    }
   }
 }

@@ -1,3 +1,4 @@
 import trace from system.console
 
-trace('nice ' .. 'meme')
+trace(-2 ^ 2)
+trace((-2) ^ 2)

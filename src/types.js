@@ -1,22 +1,28 @@
 const types = {}
 
-types.Any = class {
+types.Boolean = class {
   constructor(value) {
     this.value = value
-  }
-}
-
-types.Boolean = class extends types.Any {
-  constructor(...rest) {
-    super(...rest)
     this.type = 'Boolean'
   }
 }
 
-types.String = class extends types.Any {
-  constructor(...rest) {
-    super(...rest)
+types.String = class {
+  constructor(value) {
+    this.value = value
     this.type = 'String'
+  }
+}
+
+const Big = require('big.js') // because the native JS Number is bork
+types.Number = class extends Big {
+  constructor(value) {
+    super(value)
+    this.type = 'Number'
+  }
+
+  get value() {
+    return this.toString()
   }
 }
 

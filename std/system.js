@@ -13,7 +13,7 @@ module.exports = {
 
     // system.console.trace
     trace: function({ line }, any) {
-      console.log(`trace on line ${line}:`, any.value)
+      console.log(`trace() on line ${line}:\n  `, any.value, ':', any.type)
     }
   }
 }

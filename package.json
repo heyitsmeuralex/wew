@@ -14,6 +14,7 @@
   },
   "preferGlobal": true,
   "dependencies": {
+    "big.js": "^3.1.3",
     "nearley": "2.8.0",
     "tokenizer2": "^2.0.0",
     "yargs": "^7.0.2"

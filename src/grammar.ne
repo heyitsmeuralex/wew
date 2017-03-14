@@ -74,15 +74,20 @@ AS -> AS _ %t_plus   _ MD {% d => ['add', d[0], d[4], d[2]] %}
     | AS _ %t_minus  _ MD {% d => ['min', d[0], d[4], d[2]] %}
     | AS _ %t_dotdot _ MD {% d => ['cat', d[0], d[4], d[2]] %}
     | MD                  {% d => d[0] %}
+    | %t_minus MD
+  {% d => ['min',
+            ['number', '0', d[0]],
+            d[1],
+            d[0]
+          ] %}
 
 # Number literals
 Number -> Int                    {% d => ['number', d[0][0], d[0][1]] %}
         | Float                  {% d => ['number', d[0][0], d[0][1]] %}
-        | %t_minus (Int | Float) {% d => ['number', d[1][0] * -1, d[1][1]] %}
 Float  -> %t_int %t_dot %t_int
-  {% d => [ Number(d[0].src + '.' + d[2].src), d[0] ] %}
-        | %t_dot %t_int          {% d => [ Number('0.' + d[1].src), d[0] ] %}
-Int    -> %t_int                 {% d => [ Number(d[0].src), d[0] ] %}
+  {% d => [ d[0].src + '.' + d[2].src, d[0] ] %}
+        | %t_dot %t_int          {% d => [ '0.' + d[1].src, d[0] ] %}
+Int    -> %t_int                 {% d => [ d[0].src, d[0] ] %}
 
 # String literals
 String -> (%t_dq_string | %t_sq_string | %t_bq_string)
@@ -100,7 +105,7 @@ ArgumentList -> List[Expression, _ %t_comma _] {% d => d[0] %}
 # Conditionals
 IfConditional ->
   %k_if __ Expression __ %k_then __ Expression __ %k_else __ Expression
-  {% d => ['if_conditional', d[2], d[6], d[10]] %}
+  {% d => ['if_conditional', d[2], d[6], d[10], d[0]] %}
 
 # Identifier (incl. properties)
 Identifier -> List[%t_identifier, %t_dot] {% d => ['identifier', d[0]] %}
