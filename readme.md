@@ -1,5 +1,5 @@
 ## wew
-#### a [humanist](http://www.dictionary.com/browse/humanist) [functional](https://www.wikiwand.com/en/Functional_programming) programming language 🎉
+#### a [humanist](http://www.dictionary.com/browse/humanist) [functional programming](https://www.wikiwand.com/en/Functional_programming) language 🎉
 
 [![Release](https://img.shields.io/github/release/nanalan/wew.svg)](https://github.com/nanalan/wew/releases/latest)
 [![npm](https://img.shields.io/npm/v/wew.svg)](https://npmjs.com/package/wew)
@@ -19,5 +19,4 @@ If successful, the `wew` command should show the cli documentation.
 
 ## Documentation
 
-* [Hello, World](doc/hello.md)
-* [Syntax Reference](doc/syntax.md)
+The wew documentation can be found in [doc](doc/readme.md).
