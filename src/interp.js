@@ -54,6 +54,8 @@ module.exports = ast => new Promise((resolve, reject) => {
       break
 
       case 'expression':
+        if (rest[0] == null) continue
+        
         expression(globalScope, ...rest[0])
       break
     }

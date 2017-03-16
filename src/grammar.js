@@ -54,6 +54,7 @@ var grammar = {
     {"name": "L", "symbols": ["Expression", "__", k_or, "__", "Expression"], "postprocess": d => ['or', d[0], d[4]]},
     {"name": "L", "symbols": ["AS"], "postprocess": d => d[0]},
     {"name": "B", "symbols": [t_open_paren, "_", "AS", "_", t_close_paren], "postprocess": d => d[2]},
+    {"name": "B", "symbols": [t_open_paren, "_", t_close_paren], "postprocess": d => null},
     {"name": "B", "symbols": ["FunctionCall"], "postprocess": d => d[0]},
     {"name": "B", "symbols": ["Number"], "postprocess": d => d[0]},
     {"name": "B", "symbols": ["String"], "postprocess": d => d[0]},

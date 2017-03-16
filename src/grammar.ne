@@ -56,6 +56,7 @@ L -> Expression __ %k_and __ Expression {% d => ['and', d[0], d[4]] %}
 
 # Parentheses / Brackets
 B  -> %t_open_paren _ AS _ %t_close_paren {% d => d[2] %}
+    | %t_open_paren _ %t_close_paren      {% d => null %}
     | FunctionCall                        {% d => d[0] %}
     | Number                              {% d => d[0] %}
     | String                              {% d => d[0] %}
