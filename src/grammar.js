@@ -29,15 +29,16 @@ Object.assign(global, T, K)
 var grammar = {
     ParserRules: [
     {"name": "Program$macrocall$2", "symbols": ["Statement"]},
-    {"name": "Program$macrocall$3", "symbols": ["__"]},
+    {"name": "Program$macrocall$3", "symbols": ["_", t_newline, "_"]},
     {"name": "Program$macrocall$1$ebnf$1", "symbols": []},
     {"name": "Program$macrocall$1$ebnf$1$subexpression$1", "symbols": ["Program$macrocall$2", "Program$macrocall$3"]},
     {"name": "Program$macrocall$1$ebnf$1", "symbols": ["Program$macrocall$1$ebnf$1", "Program$macrocall$1$ebnf$1$subexpression$1"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "Program$macrocall$1", "symbols": ["Program$macrocall$1$ebnf$1", "Program$macrocall$2"], "postprocess": d => [...d[0].map(([x, y]) => x[0]), d[1][0]]},
-    {"name": "Program", "symbols": ["_", "Program$macrocall$1", "_"], "postprocess": d => ['program', d[1]]},
+    {"name": "Program", "symbols": ["_", "Program$macrocall$1", "_"], "postprocess": d => ['program', d[1].filter(n => n != null)]},
     {"name": "Program", "symbols": ["_"], "postprocess": d => []},
     {"name": "Statement", "symbols": ["ImportStatement"], "postprocess": d => d[0]},
     {"name": "Statement", "symbols": ["Expression"], "postprocess": d => ['expression', d[0]]},
+    {"name": "Statement", "symbols": [], "postprocess": d => null},
     {"name": "ImportStatement$macrocall$2", "symbols": [t_identifier]},
     {"name": "ImportStatement$macrocall$3", "symbols": ["_", t_comma, "_"]},
     {"name": "ImportStatement$macrocall$1$ebnf$1", "symbols": []},

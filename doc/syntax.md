@@ -13,10 +13,11 @@ This syntax reference serves as an introduction to:
 
 ## Structure
 
-* No semicolons.
-* Whitespace is mostly ignored.
-* Expressions/statements can be seperated by only a single space, newlines
-  are not special.
+Expressions/statements are terminated by either newlines or semicolons. The
+behaviour is similar to Python's: **when in parentheses or square brackets,
+newlines are ignored**.
+
+Other than that, whitespace is ignored.
 
 ## Comments
 

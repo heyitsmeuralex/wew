@@ -28,11 +28,13 @@ Object.assign(global, T, K)
 List[X, Y] -> ($X $Y):* $X {% d => [...d[0].map(([x, y]) => x[0]), d[1][0]] %}
 
 # Program structure
-Program   -> _ List[Statement, __] _  {% d => ['program', d[1]] %}
+Program   -> _ List[Statement, _ %t_newline _] _ 
+          {% d => ['program', d[1].filter(n => n != null)] %}
            | _ {% d => [] %}
 
 Statement -> ImportStatement {% d => d[0] %}
   | Expression {% d => ['expression', d[0]] %}
+  | null       {% d => null %}
 
 # Statement types
 ImportStatement ->
