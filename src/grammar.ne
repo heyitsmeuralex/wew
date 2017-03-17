@@ -46,10 +46,18 @@ ImportStatement ->
     {% d => [ 'import', d[2] ] %}
 
 # PEMDAS / BIDMAS:
-Expression -> L           {% d => d[0] %}
-            | %k_not __ L {% d => ['not', d[2]] %}
+Expression -> P           {% d => d[0] %}
 
-# Logical operators (and, or)
+# Pipe operators (|>, <\)
+P -> K                    {% d => d[0] %}
+   | P _ %t_pipe_fwd _ P  {% d => ['function_call', d[4], [d[0]], d[2]] %}
+   | P _ %t_pipe_bkd _ P  {% d => ['function_call', d[0], [d[4]], d[2]] %}
+
+# Logical/1 operators (not)
+K -> %k_not __ K          {% d => ['not', d[2]] %}
+   | L                    {% d => d[0] %}
+
+# Logical/2 operators (and, or)
 L -> Expression __ %k_and __ Expression {% d => ['and', d[0], d[4]] %}
    | Expression __ %k_or __ Expression  {% d => ['or', d[0], d[4]] %}
    | AS                                 {% d => d[0] %}
@@ -58,6 +66,7 @@ L -> Expression __ %k_and __ Expression {% d => ['and', d[0], d[4]] %}
 B  -> %t_open_paren _ AS _ %t_close_paren {% d => d[2] %}
     | %t_open_paren _ %t_close_paren      {% d => null %}
     | FunctionCall                        {% d => d[0] %}
+    | Identifier                          {% d => d[0] %}
     | Number                              {% d => d[0] %}
     | String                              {% d => d[0] %}
     | Bool                                {% d => d[0] %}
