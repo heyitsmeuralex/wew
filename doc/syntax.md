@@ -4,6 +4,7 @@ This syntax reference serves as an introduction to:
 
 * [Structure](#structure)
 * [Comments](#comments)
+* [Assignment](#assignment)
 * [Literals](#literals)
 * [Conditionals](#conditionals)
 * [Functions](#functions)
@@ -39,6 +40,15 @@ system.console.log('Hello, wew!')
 
 Just add or remove the `{` on the first line and you'll toggle between commented
 and uncommented!
+
+## Assignment
+
+```js
+one = 1
+hello_world = 'hello world'
+```
+
+All variables are constant.
 
 ## Literals
 

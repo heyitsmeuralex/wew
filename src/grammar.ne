@@ -33,6 +33,7 @@ Program   -> _ List[Statement, _ %t_newline _] _
            | _ {% d => [] %}
 
 Statement -> ImportStatement {% d => d[0] %}
+  | AssignStatement          {% d => d[0] %}
   | null       {% d => null %}
   | Expression {% d => ['expression', d[0]] %}
 
@@ -43,6 +44,10 @@ ImportStatement ->
     {% d => [ 'import', d[6], '*' ] %}
   | %k_import __ Identifier
     {% d => [ 'import', d[2] ] %}
+
+AssignStatement ->
+  %t_identifier _ %t_equals _ Expression
+  {% d => ['assign', d[0], d[4]] %}
 
 # Function definition
 FunctionDef ->

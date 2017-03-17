@@ -1,6 +1,6 @@
 import * from system.console
 
-incr n => n + 1
+one = 1
+incr n => n + one
 
-trace(incr)
-trace << incr(2)
+log << '2 + 1 = ' .. incr(2)

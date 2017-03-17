@@ -14,6 +14,8 @@ const rules = {
   pipe_fwd: /^>>$/,
   pipe_bkd: /^<<$/,
 
+  equals: /^=$/,
+
   open_paren: /^\($/,
   close_paren: /^\)$/,
 

@@ -1,17 +1,18 @@
 const path = require('path')
+const error = require('./error')
 const fs = require('fs')
 const types = require('./types')
 const std = path.join(__dirname, '..', 'std')
 
-module.exports = ast => new Promise((resolve, reject) => {
+module.exports = async function(ast) {
   const [, program] = ast
-  const globalScope = new Scope()
+  const scope = new Scope()
 
   for (const chunk of program) {
     const [ type, ...rest ] = chunk
 
     switch (type) {
-      case 'import':
+      case 'import': {
         const [ [, library ], what ] = rest
 
         // Where actually *is* this library?
@@ -37,30 +38,43 @@ module.exports = ast => new Promise((resolve, reject) => {
             let everything = traverse(lib, keys)
 
             for (let name in everything) {
-              globalScope.define(name, everything[name])
+              scope.define(name, everything[name])
             }
           } else {
             // Import `what` only
             for (let item of what.map(w => w.src)) {
-              globalScope.define(item, traverse(lib, [...keys, item]))
+              scope.define(item, traverse(lib, [...keys, item]))
             }
           }
         } else {
           // Import everything incl. namespace
           const importName = library[library.length - 1].src
-          globalScope.define(importName, traverse(lib, keys))
+          scope.define(importName, traverse(lib, keys))
         }
+      break }
 
-      break
-
-      case 'expression':
+      case 'expression': {
         if (rest[0] == null) continue
         
-        expression(globalScope, ...rest[0])
-      break
+        expression(scope, ...rest[0])
+      break }
+
+      case 'assign': {
+        let [ name, value ] = rest
+
+        if (scope.has(name.src))
+          throw {
+            type: error.ALREADY_DEFINED,
+            line: name.line,
+            col: name.col,
+            ident: name.src,
+          }
+
+        scope.define(name.src, expression(scope, ...value))
+      break }
     }
   }
-})
+}
 
 class Scope extends Map {
   define(identifier, value) {
@@ -122,7 +136,17 @@ function expression(scope, kind, ...rest) {
       }, args, name ? name.src : '')
 
       // Define in the current scope if it has a name
-      if (name) scope.define(name.src, f)
+      if (name) {
+        if (scope.has(name.src))
+          throw {
+            type: error.ALREADY_DEFINED,
+            line: name.line,
+            col: name.col,
+            ident: name.src,
+          }
+
+        scope.define(name.src, f)
+      }
 
       return f
     break }
@@ -150,6 +174,7 @@ function expression(scope, kind, ...rest) {
     break }
 
     case 'identifier': {
+      // TODO: x is not defined
       return scope.traverse(rest[0])
     break }
 
