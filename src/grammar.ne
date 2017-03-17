@@ -28,11 +28,13 @@ Object.assign(global, T, K)
 List[X, Y] -> ($X $Y):* $X {% d => [...d[0].map(([x, y]) => x[0]), d[1][0]] %}
 
 # Program structure
-Program   -> _ List[Statement, __] _  {% d => ['program', d[1]] %}
+Program   -> _ List[Statement, _ %t_newline _] _ 
+          {% d => ['program', d[1].filter(n => n != null)] %}
            | _ {% d => [] %}
 
 Statement -> ImportStatement {% d => d[0] %}
   | Expression {% d => ['expression', d[0]] %}
+  | null       {% d => null %}
 
 # Statement types
 ImportStatement ->
@@ -44,17 +46,27 @@ ImportStatement ->
     {% d => [ 'import', d[2] ] %}
 
 # PEMDAS / BIDMAS:
-Expression -> L           {% d => d[0] %}
-            | %k_not __ L {% d => ['not', d[2]] %}
+Expression -> P           {% d => d[0] %}
 
-# Logical operators (and, or)
+# Pipe operators (|>, <\)
+P -> K                    {% d => d[0] %}
+   | P _ %t_pipe_fwd _ P  {% d => ['function_call', d[4], [d[0]], d[2]] %}
+   | P _ %t_pipe_bkd _ P  {% d => ['function_call', d[0], [d[4]], d[2]] %}
+
+# Logical/1 operators (not)
+K -> %k_not __ K          {% d => ['not', d[2]] %}
+   | L                    {% d => d[0] %}
+
+# Logical/2 operators (and, or)
 L -> Expression __ %k_and __ Expression {% d => ['and', d[0], d[4]] %}
    | Expression __ %k_or __ Expression  {% d => ['or', d[0], d[4]] %}
    | AS                                 {% d => d[0] %}
 
 # Parentheses / Brackets
 B  -> %t_open_paren _ AS _ %t_close_paren {% d => d[2] %}
+    | %t_open_paren _ %t_close_paren      {% d => null %}
     | FunctionCall                        {% d => d[0] %}
+    | Identifier                          {% d => d[0] %}
     | Number                              {% d => d[0] %}
     | String                              {% d => d[0] %}
     | Bool                                {% d => d[0] %}

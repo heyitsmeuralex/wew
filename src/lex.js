@@ -4,9 +4,15 @@ const error = require('./error')
 const rules = {
   multiline_comment: /^#{[^}]*}$/,
   comment: /^#[^{][^\n]*$/,
-  whitespace: /^[\s]+$/,
+
+  newline: /^\n$/,
+  semicolon: /^;$/,
+  whitespace: /^[^\S\n]+$/, // except newlines
 
   keyword: /^(import|from|if|then|else|true|false|and|or|not)$/,
+
+  pipe_fwd: /^>>$/,
+  pipe_bkd: /^<<$/,
 
   open_paren: /^\($/,
   close_paren: /^\)$/,
@@ -42,6 +48,55 @@ const keywords = [
   'and', 'or', 'not',
 ]
 
+const openBrackets = [
+  'open_paren'
+]
+
+const closeBrackets = [
+  'close_paren'
+]
+
+function removeNewlinesInBrackets(toks) {
+  /*
+    Converts something like
+      [ 'newline', 'open_paren', 'newline', 'close_paren' ]
+    to
+      [ 'newline', 'open_paren', 'whitespace', 'close_paren' ]
+                                  ^^^^^^^^^^
+  */
+
+  let brackets = 0
+  let res = []
+
+  for (let tok of toks) {
+    const { type } = tok
+
+    if (type === 'newline' && brackets > 0) {
+      tok.type = 'whitespace'
+      res.push(tok)
+
+      continue
+    }
+
+    if (type === 'semicolon') {
+      tok.type = 'newline'
+      res.push(tok)
+
+      continue
+    }
+
+    if (openBrackets.includes(type))
+      brackets++
+
+    if (closeBrackets.includes(type))
+      brackets--
+
+    res.push(tok)
+  }
+
+  return res
+}
+
 module.exports = inputStream => new Promise((resolve, reject) => {
   let tokenStream = tokenizer2()
   let res = []
@@ -69,7 +124,7 @@ module.exports = inputStream => new Promise((resolve, reject) => {
   })
 
   tokenStream.on('end', () => {
-    resolve(res)
+    resolve(removeNewlinesInBrackets(res))
   })
 
   // Tokenize!

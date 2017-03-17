@@ -1,4 +1,5 @@
-import trace from system.console
+import * from system.console
 
-trace(-2 ^ 2)
-trace((-2) ^ 2)
+trace('hi')
+trace << 2^6 + 8
+'hello' .. ' world' >> trace

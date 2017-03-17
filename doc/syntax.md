@@ -13,10 +13,11 @@ This syntax reference serves as an introduction to:
 
 ## Structure
 
-* No semicolons.
-* Whitespace is mostly ignored.
-* Expressions/statements can be seperated by only a single space, newlines
-  are not special.
+Expressions/statements are terminated by either newlines or semicolons. The
+behaviour is similar to Python's: **when in parentheses or square brackets,
+newlines are ignored**.
+
+Other than that, whitespace is ignored.
 
 ## Comments
 
@@ -88,11 +89,28 @@ like normal variables.
 > Currently there is no way to define functions yourself with wew. 
 > Patience is a virtue.
 
+You can also use the forward pipe operator.
+
+```wew
+'hello' >> String.reverse
+# equivalent to
+String.reverse('hello')
+```
+
+Or the _backward_ pipe operator.
+
+```wew
+log << String.reverse << 'hola'
+# equivalent to
+log(String.reverse('hola'))
+```
+
 ## Operators
 
 ```wew
 # In order of precedence:
 
+Function ( Expression, Expression, ... )
 ( Expression )
 
 not Boolean
@@ -106,6 +124,9 @@ Number + Number # use .. to concat strings
 Number - Number
 
 String .. String
+
+Expression  |> Expression
+Expression <|  Expression
 ```
 
 ## Imports

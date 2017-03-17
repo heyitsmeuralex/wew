@@ -54,6 +54,8 @@ module.exports = ast => new Promise((resolve, reject) => {
       break
 
       case 'expression':
+        if (rest[0] == null) continue
+        
         expression(globalScope, ...rest[0])
       break
     }
@@ -65,7 +67,7 @@ class Scope extends Map {
     this.set(identifier, value)
   }
 
-  traverse([, path]) {
+  traverse(path) {
     path = path.map(p => p.src)
 
     function recurse(obj, keys) {
@@ -98,10 +100,10 @@ function expression(scope, kind, ...rest) {
     break }
 
     case 'function_call': {
-      const [ ident, args, { line, col } ] = rest
+      const [ tocall, args, { line, col } ] = rest
 
-      // Grab the fn from our current scope
-      let fn = scope.traverse(ident)
+      // Parse the fn-to-call expression
+      let fn = expression(scope, ...tocall)
 
       // Call the fn
       // TODO user-defined functions
@@ -118,6 +120,10 @@ function expression(scope, kind, ...rest) {
 
     case 'number': {
       return new types.Number(rest[0])
+    break }
+
+    case 'identifier': {
+      return scope.traverse(rest[0])
     break }
 
     // Boolean Operators
