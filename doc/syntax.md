@@ -89,11 +89,28 @@ like normal variables.
 > Currently there is no way to define functions yourself with wew. 
 > Patience is a virtue.
 
+You can also use the forward pipe operator.
+
+```wew
+'hello' |> String.reverse
+# equivalent to
+String.reverse('hello')
+```
+
+Or the _backward_ pipe operator.
+
+```wew
+log <| String.reverse <| 'hola'
+# equivalent to
+log(String.reverse('hola'))
+```
+
 ## Operators
 
 ```wew
 # In order of precedence:
 
+Function ( Expression, Expression, ... )
 ( Expression )
 
 not Boolean
@@ -107,6 +124,9 @@ Number + Number # use .. to concat strings
 Number - Number
 
 String .. String
+
+Expression  |> Expression
+Expression <|  Expression
 ```
 
 ## Imports
