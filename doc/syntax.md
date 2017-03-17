@@ -92,7 +92,7 @@ like normal variables.
 You can also use the forward pipe operator.
 
 ```wew
-'hello' |> String.reverse
+'hello' >> String.reverse
 # equivalent to
 String.reverse('hello')
 ```
@@ -100,7 +100,7 @@ String.reverse('hello')
 Or the _backward_ pipe operator.
 
 ```wew
-log <| String.reverse <| 'hola'
+log << String.reverse << 'hola'
 # equivalent to
 log(String.reverse('hola'))
 ```
