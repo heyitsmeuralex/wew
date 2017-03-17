@@ -28,15 +28,14 @@ Object.assign(global, T, K)
 List[X, Y] -> ($X $Y):* $X {% d => [...d[0].map(([x, y]) => x[0]), d[1][0]] %}
 
 # Program structure
-Program   -> _ List[Statement, _ %t_newline _] _ 
-          {% d => ['program', d[1].filter(n => n != null)] %}
+Program   -> _ List[Statement, _ %t_newline _] _
+           {% d => ['program', d[1].filter(n => n != null)] %}
            | _ {% d => [] %}
 
 Statement -> ImportStatement {% d => d[0] %}
-  | Expression {% d => ['expression', d[0]] %}
   | null       {% d => null %}
+  | Expression {% d => ['expression', d[0]] %}
 
-# Statement types
 ImportStatement ->
     %k_import __ List[%t_identifier, _ %t_comma _] __ %k_from __ Identifier
     {% d => [ 'import', d[6], d[2] ] %}
@@ -45,8 +44,25 @@ ImportStatement ->
   | %k_import __ Identifier
     {% d => [ 'import', d[2] ] %}
 
+# Function definition
+FunctionDef ->
+  (
+      %t_identifier:? _ %t_open_paren _ (
+        List[%t_identifier, _ %t_comma _] {% d => d[0] %}
+        | null {% d => [] %}
+      ) _ %t_close_paren {% d => [ d[0], d[4] ] %}
+    | %t_identifier __ %t_identifier {% d => [ d[0], [ d[2] ] ] %}
+    | %t_identifier {% d => [ null, [ d[0] ] ] %}
+  ):? _ %t_arrow _ Expression {% ([ [ name, args ], ,,, body ]) =>
+    [ name, args, body ]
+  %}
+
 # PEMDAS / BIDMAS:
-Expression -> P           {% d => d[0] %}
+Expression -> F           {% d => d[0] %}
+
+# Function definition
+F -> FunctionDef                         {% d => ['fn', ...d[0]] %}
+   | P {% d => d[0] %}
 
 # Pipe operators (|>, <\)
 P -> K                    {% d => d[0] %}

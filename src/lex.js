@@ -17,6 +17,8 @@ const rules = {
   open_paren: /^\($/,
   close_paren: /^\)$/,
 
+  arrow: /^=>$/,
+
   asterisk: /^\*$/,
   plus: /^\+$/,
   minus: /^\-$/,

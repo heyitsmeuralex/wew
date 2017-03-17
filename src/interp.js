@@ -99,6 +99,34 @@ function expression(scope, kind, ...rest) {
         return expression(scope, ...ifFalse)
     break }
 
+    case 'fn': {
+      // Lambda/fndef
+      const [ name, args, body ] = rest
+
+      let f = new types.Function(({ line, col, scope }, ...params) => {
+        // Construct a new scope that inherits the outer one
+        let env = new Scope(scope)
+
+        // Define the passed parameters
+        for (let i in params) {
+          let value = params[i]
+          let ident = args[i].src
+
+          env.define(ident, value)
+        }
+
+        // Run the function body
+        let res = expression(env, ...body)
+
+        return res
+      }, args, name ? name.src : '')
+
+      // Define in the current scope if it has a name
+      if (name) scope.define(name.src, f)
+
+      return f
+    break }
+
     case 'function_call': {
       const [ tocall, args, { line, col } ] = rest
 
@@ -106,8 +134,7 @@ function expression(scope, kind, ...rest) {
       let fn = expression(scope, ...tocall)
 
       // Call the fn
-      // TODO user-defined functions
-      fn({ line, col, scope }, ...args.map(arg => expression(scope, ...arg)))
+      return fn.fn({ line, col, scope }, ...args.map(arg => expression(scope, ...arg)))
     break }
 
     case 'string': {

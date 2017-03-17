@@ -1,19 +1,16 @@
+const { Function: f, Nothing } = require('../src/types')
 const guard = () => {} // TODO
 
-// system
 module.exports = {
-  // system.console
   console: {
-    // system.console.log
-    log: function(_, string) {
-      guard(string, 'String', 'system.console.log')
+    log: new f(({}, str) => {
+      console.log(str.value)
+    }, { src: 'str', type: 'String' }, 'log'),
 
-      console.log(string.value)
-    },
+    trace: new f(({ line }, any) => {
+      if (any == undefined) any = new Nothing
 
-    // system.console.trace
-    trace: function({ line }, any) {
-      console.log(`trace() on line ${line}:\n  `, any.value, ':', any.type)
-    }
+      console.log(`trace on line ${line}:\n  `, any.value, ':', any.type)
+    }, { src: 'x' }, 'trace')
   }
 }
