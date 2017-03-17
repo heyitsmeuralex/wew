@@ -7,6 +7,7 @@ This syntax reference serves as an introduction to:
 * [Literals](#literals)
 * [Conditionals](#conditionals)
 * [Functions](#functions)
+* [Defining functions](#defining-functions)
 * [Operators](#operators)
 * [Imports](#imports)
 * [Identifiers](#identifiers)
@@ -58,6 +59,9 @@ false
 # Multiline strings
 `Roses are red
 violets are blue`
+
+# Functions
+add_one n => n + 1
 ```
 
 ## Conditionals
@@ -84,10 +88,7 @@ myfunction('argument', true, .3, somevariable)
 
 Functions are invoked (called) in a way that should be familiar to all
 programmers. Functions are first-class, too, so you can pass them around just
-like normal variables.
-
-> Currently there is no way to define functions yourself with wew. 
-> Patience is a virtue.
+like normal variables. [How to define functions](#defining-functions)
 
 You can also use the forward pipe operator.
 
@@ -103,6 +104,22 @@ Or the _backward_ pipe operator.
 log << String.reverse << 'hola'
 # equivalent to
 log(String.reverse('hola'))
+```
+
+## Defining functions
+
+```wew
+name(arg1, arg2, ...) => expression
+
+# the function name is optional:
+(a, b, c) => a + b - c
+
+# parentheses are optional when there's only one parameter:
+n => n + 1
+add_one n => n + 1
+
+# a function with *no* parameters requires parentheses:
+noop() => Nothing
 ```
 
 ## Operators
