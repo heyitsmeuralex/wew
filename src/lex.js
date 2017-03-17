@@ -11,8 +11,8 @@ const rules = {
 
   keyword: /^(import|from|if|then|else|true|false|and|or|not)$/,
 
-  pipe_fwd: /^\|>$/,
-  pipe_bkd: /^<\|$/,
+  pipe_fwd: /^>>$/,
+  pipe_bkd: /^<<$/,
 
   open_paren: /^\($/,
   close_paren: /^\)$/,
