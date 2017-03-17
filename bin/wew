@@ -16,6 +16,11 @@ function inspect(obj) {
   return obj
 }
 
+function ambiguous(obj) {
+  console.warn('ambiguous:')
+  return inspect(obj)
+}
+
 if (argv.version) {
   // Print wew version and exit
   const ver = require('../package.json').version
@@ -33,7 +38,7 @@ if (argv.version) {
   lex(fstream)
     .then(tokens => argv.tokens ? inspect(tokens) : tokens)
     .then(parse)
-    .then(trees => trees[0])
+    .then(trees => trees.length > 1 ? ambiguous(trees) : trees[0])
     .then(ast => argv.ast ? inspect(ast) : ast)
     .then(interp)
     .catch(error.format)
