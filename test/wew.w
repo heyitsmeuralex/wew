@@ -1,10 +1,12 @@
 import system.console
 
-emptymap = []
-map = [ one -> 1,
-        pow -> n => exp => n^exp,
-        top -> if true then 'kek' else 'lel' ]
+console.log([
+  map -> [
+    yetanothermap -> [
+      lastmap -> [],
+      secondlastmap -> []
+    ],
 
-console.trace(emptymap)
-console.trace(map)
-console.trace(map.pow(6))
+    secondyetanothermap -> []
+  ]
+])

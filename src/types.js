@@ -73,9 +73,9 @@ types.Map = class {
     // Construct string representation of this map
 
     if (this.map.size === 0)
-      return '{}'
+      return '[]'
 
-    let res = '{ '
+    let res = '[ '
     let first = true
     let longestKeyLength = 0
 
@@ -94,15 +94,18 @@ types.Map = class {
       if (value === this)
         res += '<recursive>'
       else
-        res += value.value.length > 24
-             ? value.value.substr(0, 21)
+        res += value.value
+            .replace(/\n/g, '\n'+' '.repeat(longestKeyLength+6))
+            .split('\n').map(ln => ln.length > 60
+             ? ln.substr(0, 57)
              + '...'
-             + value.value.substr(-1)
-             : value.value
+             + ln.substr(-1)
+             : ln)
+            .join('\n')
       res += ','
     }
 
-    return res.substr(0, res.length - 2) + ' }'
+    return res.substr(0, res.length - 1) + ' ]'
   }
 }
 
