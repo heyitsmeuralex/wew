@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs')
+const eq = require('deep-equal')
 const argv = require('yargs')
   .alias('v', 'version')
   .boolean([ 'ast', 'tokens' ])

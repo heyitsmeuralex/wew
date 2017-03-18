@@ -28,6 +28,8 @@ Object.assign(global, T, K)
 List[X, Y] -> ($X $Y):* $X {% d => [...d[0].map(([x, y]) => x[0]), d[1][0]] %}
 List2[X, Y] -> ($X $Y):* $X {% d => [...d[0].map(([x, y]) => x), d[1]]%}
 
+ListBack2[X, Y] -> ($X $Y):+ {% d => d[0].map(([x, y]) => y) %}
+
 # Program structure
 Program   -> _ List[Statement, _ %t_newline _] _
            {% d => ['program', d[1].filter(n => n != null)] %}
@@ -88,12 +90,9 @@ L -> Expression __ %k_and __ Expression {% d => ['and', d[0], d[4]] %}
 B  -> %t_open_paren _ AS _ %t_close_paren {% d => d[2] %}
     | %t_open_paren _ %t_close_paren      {% d => null %}
     | FunctionCall                        {% d => d[0] %}
-    | Identifier                          {% d => d[0] %}
-    | Number                              {% d => d[0] %}
-    | String                              {% d => d[0] %}
-    | Bool                                {% d => d[0] %}
-    | Map                                 {% d => d[0] %}
+    | Literal                             {% d => d[0] %}
     | IfConditional                       {% d => d[0] %}
+    | MatchConditional                    {% d => d[0] %}
 
 # Exponents / Indicies
 I  -> B _ %t_caret _ I {% d => ['pow', d[0], d[4], d[2]] %}
@@ -116,6 +115,12 @@ AS -> AS _ %t_plus   _ MD {% d => ['add', d[0], d[4], d[2]] %}
             d[0]
           ] %}
 
+Literal -> Identifier                     {% d => d[0] %}
+    | Number                              {% d => d[0] %}
+    | String                              {% d => d[0] %}
+    | Bool                                {% d => d[0] %}
+    | Map                                 {% d => d[0] %}
+
 # Number literals
 Number -> Int                    {% d => ['number', d[0][0], d[0][1]] %}
         | Float                  {% d => ['number', d[0][0], d[0][1]] %}
@@ -135,9 +140,6 @@ Bool -> %k_true  {% d => ['bool', true] %}
 # Map literal
 Map -> %t_open_square _ MapContents:? _ %t_close_square
     {% d => ['map', d[2] || []] %}
-# MapContents -> %t_identifier _ %t_arrow _ Expression _
-#                (%t_comma _ MapContents {% d => d[2] %}|%t_comma:? {% d => [] %})
-#             {% d => [...d[6], [d[0], d[4]]] %}
 MapContents -> List2[%t_identifier _ %t_arrow _ Expression, _ %t_comma _]
             {% d => d[0].map(d => [ d[0], d[4] ]) %}
 
@@ -148,9 +150,17 @@ ArgumentList -> List[Expression, _ %t_comma _] {% d => d[0] %}
               | null                           {% d => [] %}
 
 # Conditionals
+
 IfConditional ->
-  %k_if __ Expression __ %k_then __ Expression __ %k_else __ Expression
+  %k_if nn Expression nn %k_then nn Expression nn %k_else nn Expression
   {% d => ['if_conditional', d[2], d[6], d[10], d[0]] %}
+
+MatchConditional ->
+  %k_match nn Expression nn %k_where nn MatchConditionalContents
+  {% d => ['match_conditional', d[2], d[6], d[0]] %}
+MatchConditionalContents ->
+  ListBack2[n %t_pipe n, Literal _ %t_arrow _ Expression]
+  {% d => d[0].map(d => [ d[2], d[6] ]) %}
 
 # Identifier (incl. properties)
 Identifier -> List[%t_identifier, %t_dot] {% d => ['identifier', d[0]] %}
@@ -158,3 +168,6 @@ Identifier -> List[%t_identifier, %t_dot] {% d => ['identifier', d[0]] %}
 # Whitespace matching
 _   -> %t_whitespace:* {% d => null %}
 __  -> %t_whitespace:+ {% d => null %}
+
+n   -> (%t_whitespace | %t_newline):* {% d => null %}
+nn  -> (%t_whitespace | %t_newline):+ {% d => null %}

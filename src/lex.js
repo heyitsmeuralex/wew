@@ -9,7 +9,7 @@ const rules = {
   semicolon: /^;$/,
   whitespace: /^[^\S\n]+$/, // except newlines
 
-  keyword: /^(import|from|if|then|else|true|false|and|or|not)$/,
+  keyword: /^(import|from|if|then|else|true|false|and|or|not|match|where|as)$/,
 
   pipe_fwd: /^>>$/,
   pipe_bkd: /^<<$/,
@@ -26,6 +26,8 @@ const rules = {
 
   fat_arrow: /^=>$/,
   arrow: /^->$/,
+
+  pipe: /^\|$/,
 
   asterisk: /^\*$/,
   plus: /^\+$/,
@@ -56,6 +58,8 @@ const keywords = [
   'if', 'then', 'else',
   'true', 'false',
   'and', 'or', 'not',
+  'match', 'where',
+  'as',
 ]
 
 const openBrackets = [
