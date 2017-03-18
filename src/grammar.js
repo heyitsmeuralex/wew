@@ -120,6 +120,7 @@ var grammar = {
     {"name": "ArgumentList$macrocall$1$ebnf$1", "symbols": ["ArgumentList$macrocall$1$ebnf$1", "ArgumentList$macrocall$1$ebnf$1$subexpression$1"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "ArgumentList$macrocall$1", "symbols": ["ArgumentList$macrocall$1$ebnf$1", "ArgumentList$macrocall$2"], "postprocess": d => [...d[0].map(([x, y]) => x[0]), d[1][0]]},
     {"name": "ArgumentList", "symbols": ["ArgumentList$macrocall$1"], "postprocess": d => d[0]},
+    {"name": "ArgumentList", "symbols": [], "postprocess": d => []},
     {"name": "IfConditional", "symbols": [k_if, "__", "Expression", "__", k_then, "__", "Expression", "__", k_else, "__", "Expression"], "postprocess": d => ['if_conditional', d[2], d[6], d[10], d[0]]},
     {"name": "Identifier$macrocall$2", "symbols": [t_identifier]},
     {"name": "Identifier$macrocall$3", "symbols": [t_dot]},
