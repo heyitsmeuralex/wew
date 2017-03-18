@@ -72,6 +72,11 @@ violets are blue`
 
 # Functions
 add_one n => n + 1
+
+# Maps
+[ a -> 1,
+  b -> 2,
+  c -> 3 ]
 ```
 
 ## Conditionals
