@@ -16,10 +16,16 @@ const rules = {
 
   equals: /^=$/,
 
+  // brackets
   open_paren: /^\($/,
   close_paren: /^\)$/,
+  open_curly: /^\{$/,
+  close_curly: /^\}$/,
+  open_square: /^\[$/,
+  close_square: /^\]$/,
 
-  arrow: /^=>$/,
+  fat_arrow: /^=>$/,
+  arrow: /^->$/,
 
   asterisk: /^\*$/,
   plus: /^\+$/,
@@ -53,11 +59,15 @@ const keywords = [
 ]
 
 const openBrackets = [
-  'open_paren'
+  'open_paren',
+  'open_curly',
+  'open_square',
 ]
 
 const closeBrackets = [
-  'close_paren'
+  'close_paren',
+  'close_curly',
+  'close_square',
 ]
 
 function removeNewlinesInBrackets(toks) {

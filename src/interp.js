@@ -27,8 +27,10 @@ module.exports = async function(ast) {
         const lib = require(path.join(std, libraryName))
         
         function traverse(obj, keys) {
+          // TODO: obj must be types.Map
+
           return keys.length
-            ? traverse(obj[keys[0]], keys.slice(1))
+            ? traverse(obj.get(keys[0]), keys.slice(1))
             : obj
         }
 
@@ -37,8 +39,8 @@ module.exports = async function(ast) {
             // Import everything w/o namespace
             let everything = traverse(lib, keys)
 
-            for (let name in everything) {
-              scope.define(name, everything[name])
+            for (let [ key, value ] of everything.map) {
+              scope.define(key, value)
             }
           } else {
             // Import `what` only
@@ -86,7 +88,7 @@ class Scope extends Map {
 
     function recurse(obj, keys) {
       return keys.length
-        ? recurse(obj[keys[0]], keys.slice(1))
+        ? recurse(obj.get(keys[0]), keys.slice(1))
         : obj
     }
 
@@ -111,6 +113,11 @@ function expression(scope, kind, ...rest) {
         return expression(scope, ...ifTrue)
       else
         return expression(scope, ...ifFalse)
+    break }
+
+    case 'map': {
+      return new types.Map(rest[0].map(([ key, value ]) =>
+        [ key.src, expression(scope, ...value) ]))
     break }
 
     case 'fn': {

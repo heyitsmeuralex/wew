@@ -17,8 +17,8 @@ function inspect(obj) {
 }
 
 function ambiguous(obj) {
-  console.warn('ambiguous:')
-  return inspect(obj)
+  obj.map(x => { inspect(x); console.log('\n') })
+  process.exit(1)
 }
 
 if (argv.version) {

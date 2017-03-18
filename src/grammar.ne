@@ -26,6 +26,7 @@ Object.assign(global, T, K)
 
 # Macros
 List[X, Y] -> ($X $Y):* $X {% d => [...d[0].map(([x, y]) => x[0]), d[1][0]] %}
+List2[X, Y] -> ($X $Y):* $X $Y:? {% d => [...d[0].map(([x, y]) => x), d[1]]%}
 
 # Program structure
 Program   -> _ List[Statement, _ %t_newline _] _
@@ -58,7 +59,7 @@ FunctionDef ->
       ) _ %t_close_paren {% d => [ d[0], d[4] ] %}
     | %t_identifier __ %t_identifier {% d => [ d[0], [ d[2] ] ] %}
     | %t_identifier {% d => [ null, [ d[0] ] ] %}
-  ):? _ %t_arrow _ Expression {% ([ [ name, args ], ,,, body ]) =>
+  ):? _ %t_fat_arrow _ Expression {% ([ [ name, args ], ,,, body ]) =>
     [ name, args, body ]
   %}
 
@@ -91,6 +92,7 @@ B  -> %t_open_paren _ AS _ %t_close_paren {% d => d[2] %}
     | Number                              {% d => d[0] %}
     | String                              {% d => d[0] %}
     | Bool                                {% d => d[0] %}
+    | Map                                 {% d => d[0] %}
     | IfConditional                       {% d => d[0] %}
 
 # Exponents / Indicies
@@ -129,6 +131,15 @@ String -> (%t_dq_string | %t_sq_string | %t_bq_string)
 # Boolean literals
 Bool -> %k_true  {% d => ['bool', true] %}
       | %k_false {% d => ['bool', false] %}
+
+# Map literal
+Map -> %t_open_square _ MapContents:? _ %t_close_square
+    {% d => ['map', d[2] || []] %}
+# MapContents -> %t_identifier _ %t_arrow _ Expression _
+#                (%t_comma _ MapContents {% d => d[2] %}|%t_comma:? {% d => [] %})
+#             {% d => [...d[6], [d[0], d[4]]] %}
+MapContents -> List2[%t_identifier _ %t_arrow _ Expression, _ %t_comma _]
+            {% d => d[0].map(d => [ d[0], d[4] ]) %}
 
 # Function invocation
 FunctionCall -> Identifier _ %t_open_paren _ ArgumentList _ %t_close_paren

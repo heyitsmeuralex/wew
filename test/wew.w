@@ -1,6 +1,10 @@
-import * from system.console
+import system.console
 
-one = 1
-incr n => n + one
+emptymap = []
+map = [ one -> 1,
+        pow -> n => exp => n^exp,
+        top -> if true then 'kek' else 'lel' ]
 
-log << '2 + 1 = ' .. incr(2)
+console.trace(emptymap)
+console.trace(map)
+console.trace(map.pow(6))
