@@ -26,7 +26,7 @@ Object.assign(global, T, K)
 
 # Macros
 List[X, Y] -> ($X $Y):* $X {% d => [...d[0].map(([x, y]) => x[0]), d[1][0]] %}
-List2[X, Y] -> ($X $Y):* $X $Y:? {% d => [...d[0].map(([x, y]) => x), d[1]]%}
+List2[X, Y] -> ($X $Y):* $X {% d => [...d[0].map(([x, y]) => x), d[1]]%}
 
 # Program structure
 Program   -> _ List[Statement, _ %t_newline _] _
